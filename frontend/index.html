@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Parking Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>🚗 Smart Parking Dashboard</h1>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="history.html">History</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <div id="spinner" class="loading-spinner"></div>
+
+  <div class="container" id="gallery" style="display:none;"></div>
+
+  <div class="chart-container" data-aos="fade-up">
+    <canvas id="violationChart"></canvas>
+  </div>
+
+  <footer>
+    © 2025 Smart Parking System | Designed by Adarsh Deshpande
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

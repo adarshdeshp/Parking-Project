@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Violation History</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Violation History</h1>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="history.html">History</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <div class="history" id="history-list">
+    <h2>Previously Detected Violations</h2>
+  </div>
+
+  <footer>
+    © 2025 Smart Parking System
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    async function loadHistory() {
+      const res = await fetch("http://localhost:5000/violations");
+      const images = await res.json();
+      const list = document.getElementById("history-list");
+      images.reverse().forEach(src => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+          <img src="${src}" alt="violation"/>
+          <span>Violation recorded at ${new Date().toLocaleString()}</span>
+        `;
+        list.appendChild(div);
+      });
+    }
+    loadHistory();
+  </script>
+</body>
+</html>

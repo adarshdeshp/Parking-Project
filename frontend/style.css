@@ -1,0 +1,116 @@
+/* ==== General Layout ==== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+  color: #eaeaea;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+header {
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+header h1 {
+  margin: 0;
+  color: white;
+  font-weight: 600;
+}
+
+nav a {
+  color: white;
+  margin-left: 1.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -4px;
+  background: #ffeaa7;
+  transition: width 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* ==== Dashboard Grid ==== */
+.container {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.25);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.loading-spinner {
+  margin: 100px auto;
+  border: 6px solid #ccc;
+  border-top: 6px solid #00c6ff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==== Chart Section ==== */
+.chart-container {
+  width: 80%;
+  max-width: 800px;
+  margin: 3rem auto;
+  background: rgba(0,0,0,0.3);
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,255,255,0.2);
+}
+
+/* ==== Footer ==== */
+footer {
+  background: #141418;
+  color: #bbb;
+  text-align: center;
+  padding: 1.2rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  margin-top: 4rem;
+}
+footer a {
+  color: #00c6ff;
+  text-decoration: none;
+}                   
