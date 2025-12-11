@@ -1,6 +1,6 @@
 AOS.init();
 
-const BACKEND_URL = "http://localhost:5000";
+const BACKEND_URL = "http://10.121.58.24:5000";
 
 const spinner = document.getElementById("spinner");
 const gallery = document.getElementById("gallery");
