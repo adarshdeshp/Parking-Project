@@ -5,13 +5,15 @@ from datetime import datetime
 import glob
 
 app = Flask(__name__)
-CORS(app)  # allow all origins
+CORS(app)  # allow all devices to access API
 
 UPLOAD_FOLDER = "uploads"
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-# ---------------- Upload Image ----------------
+# ---------------------------------------------------
+# 🔹 Upload Image from ESP32
+# ---------------------------------------------------
 @app.route("/upload", methods=["POST"])
 def upload():
     try:
@@ -32,7 +34,10 @@ def upload():
         print("ERROR:", e)
         return "SERVER ERROR", 500
 
-# ---------------- Latest Image ----------------
+
+# ---------------------------------------------------
+# 🔹 Latest Uploaded Image
+# ---------------------------------------------------
 @app.route("/latest-image")
 def latest_image():
     files = glob.glob(os.path.join(UPLOAD_FOLDER, "*.jpg"))
@@ -41,23 +46,39 @@ def latest_image():
     latest = max(files, key=os.path.getctime)
     return send_file(latest, mimetype="image/jpeg")
 
-# ---------------- List All Violations ----------------
+
+# ---------------------------------------------------
+# 🔹 Return List of All Violations (IMAGE URLs)
+# ---------------------------------------------------
 @app.route("/violations")
 def violations():
     files = sorted(os.listdir(UPLOAD_FOLDER))
-    urls = [f"http://localhost:5000/uploads/{f}" for f in files if f.endswith(".jpg")]
+    
+    # Automatically detect server IP (10.x.x.x or 192.x.x.x)
+    base = request.host_url.rstrip("/")
+    
+    urls = [f"{base}/uploads/{f}" for f in files if f.endswith(".jpg")]
     return jsonify(urls)
 
-# ---------------- Serve Uploaded Files ----------------
+
+# ---------------------------------------------------
+# 🔹 Serve Uploaded Files (Image Hosting)
+# ---------------------------------------------------
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-# ---------------- Root ----------------
+
+# ---------------------------------------------------
+# 🔹 Root
+# ---------------------------------------------------
 @app.route("/")
 def home():
     return "Smart Parking Server is running!"
 
-# ---------------- Run App ----------------
+
+# ---------------------------------------------------
+# Run Flask App
+# ---------------------------------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
