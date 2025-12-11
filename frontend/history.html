@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
   <title>Violation History</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>Violation History</h1>
     <nav>
-      <a href="{{ url_for('index') }}">Dashboard</a>
-      <a href="{{ url_for('history') }}">History</a>
-      <a href="{{ url_for('about') }}">About</a>
+      <a href="index.html">Dashboard</a>
+      <a href="history.html">History</a>
+      <a href="about.html">About</a>
     </nav>
   </header>
 
@@ -23,18 +22,17 @@
     © 2025 Smart Parking System
   </footer>
 
+  <script src="script.js"></script>
   <script>
     async function loadHistory() {
-      // Fetch all uploaded images from Flask
-      const res = await fetch("http://10.173.184.189:5000/violations");
+      const res = await fetch("http://localhost:5000/violations");
       const images = await res.json();
       const list = document.getElementById("history-list");
-
       images.reverse().forEach(src => {
         const div = document.createElement("div");
         div.className = "history-item";
         div.innerHTML = `
-          <img src="${src}" alt="violation" style="width:50%; border:2px solid black; margin:5px; border-radius:8px;">
+          <img src="${src}" alt="violation"/>
           <span>Violation recorded at ${new Date().toLocaleString()}</span>
         `;
         list.appendChild(div);
@@ -42,7 +40,5 @@
     }
     loadHistory();
   </script>
-
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

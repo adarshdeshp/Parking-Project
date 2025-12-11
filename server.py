@@ -1,23 +1,63 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory, send_file, jsonify
+from flask_cors import CORS
 import os
 from datetime import datetime
+import glob
 
 app = Flask(__name__)
+CORS(app)  # allow all origins
 
-# Folder to save uploads
 UPLOAD_FOLDER = "uploads"
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-@app.route('/upload', methods=['POST'])
+# ---------------- Upload Image ----------------
+@app.route("/upload", methods=["POST"])
 def upload():
-    img = request.data
-    # Save with unique timestamp name
-    filename = os.path.join(UPLOAD_FOLDER, f"vehicle_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg")
-    with open(filename, "wb") as f:
-        f.write(img)
-    print(f"Received {len(img)} bytes → saved as {filename}")
-    return "OK", 200
+    try:
+        img = request.data
+        if not img:
+            return "NO IMAGE RECEIVED", 400
 
-# Run server on all network interfaces
-app.run(host="0.0.0.0", port=5000)
+        filename = f"vehicle_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+
+        with open(filepath, "wb") as f:
+            f.write(img)
+
+        print(f"Saved: {filepath}")
+        return "OK", 200
+
+    except Exception as e:
+        print("ERROR:", e)
+        return "SERVER ERROR", 500
+
+# ---------------- Latest Image ----------------
+@app.route("/latest-image")
+def latest_image():
+    files = glob.glob(os.path.join(UPLOAD_FOLDER, "*.jpg"))
+    if not files:
+        return "No IMAGE", 404
+    latest = max(files, key=os.path.getctime)
+    return send_file(latest, mimetype="image/jpeg")
+
+# ---------------- List All Violations ----------------
+@app.route("/violations")
+def violations():
+    files = sorted(os.listdir(UPLOAD_FOLDER))
+    urls = [f"http://localhost:5000/uploads/{f}" for f in files if f.endswith(".jpg")]
+    return jsonify(urls)
+
+# ---------------- Serve Uploaded Files ----------------
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
+# ---------------- Root ----------------
+@app.route("/")
+def home():
+    return "Smart Parking Server is running!"
+
+# ---------------- Run App ----------------
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
